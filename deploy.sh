@@ -30,27 +30,25 @@ echo -e "\e[33mInstall web-sever - OK\e[0m"
 apt-get install -y mariadb-server > /dev/null
 echo -e "\e[33mInstall MariaDB - OK\e[0m"
 
-mariadb -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$db_rt_pass')"
-mariadb -e "DROP USER ''@'localhost'"
-mariadb -e "DROP DATABASE test"
-mariadb -e "FLUSH PRIVILEGES"
+mariadb -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$db_rt_pass')" > /dev/null
+mariadb -e "DROP USER ''@'localhost'" > /dev/null
+mariadb -e "DROP DATABASE test" > /dev/null
+mariadb -e "FLUSH PRIVILEGES" > /dev/null
 echo -e "\e[33mInstall DB secure - OK\e[0m"
 
-mariadb -e "CREATE DATABASE $db_name"
-mariadb -e "CREATE USER $db_user@'localhost' IDENTYFIED BY '$db_pass'"
-mariadb -e "GRANT ALL ON $db_name.* TO $db_user@'localhost'"
-mariadb -e "FLUSH PRIVILEGES"
+mariadb -e "CREATE DATABASE $db_name" > /dev/null
+mariadb -e "CREATE USER $db_user@'localhost' IDENTYFIED BY '$db_pass'" > /dev/null
+mariadb -e "GRANT ALL ON $db_name.* TO $db_user@'localhost'" > /dev/null
+mariadb -e "FLUSH PRIVILEGES" > /dev/null
 echo -e "\e[33mCreate DB and DB-user - OK\e[0m"
 
 apt-get inslall php-cgi php-mysql > /dev/null
 echo -e "\e[33mInstall PHP - OK\e[0m"
 
-lighty-enable-mod fastcgi
-lighty-enable-mod fastcgi-php
+lighty-enable-mod fastcgi > /dev/null
+lighty-enable-mod fastcgi-php > /dev/null
 service lighttpd force-reload
 echo -e "\e[33mEnable FastCGI - OK\e[0m"
-#apt-get install -y phpmyadmin
-#echo -e "\e[33mInstall phpMyAdmin - OK\e[0m"
 
 wget -O wp-cli https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli
