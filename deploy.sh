@@ -36,7 +36,7 @@ mariadb -e "GRANT ALL ON $db_name.* TO '$db_user'@'localhost'" > /dev/null
 mariadb -e "FLUSH PRIVILEGES" > /dev/null
 echo -e "\e[33mCreate DB and DB-user - OK\e[0m"
 
-apt-get install php-cgi php-mysql > /dev/null
+apt-get install -y php-cgi php-mysql > /dev/null
 echo -e "\e[33mInstall PHP - OK\e[0m"
 
 lighty-enable-mod fastcgi > /dev/null
@@ -44,7 +44,7 @@ lighty-enable-mod fastcgi-php > /dev/null
 service lighttpd force-reload
 echo -e "\e[33mEnable FastCGI - OK\e[0m"
 
-wget -O wp-cli https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+wget -O wp-cli https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar > /dev/null
 chmod +x wp-cli
 mv wp-cli /usr/local/bin
 wp-cli core download --allow-root --path="/var/www/html" > /dev/null
@@ -71,20 +71,19 @@ echo -e "\e[33mInstall Firewall - OK\e[0m"
 ufw allow 80 > /dev/null
 ufw allow 21 > /dev/null
 ufw allow 22 > /dev/null
-service ufw restart
+ufw enable
 echo -e "\e[33mConfig Firewall - OK\e[0m"
 
 apt-get install -y sudo > /dev/null
 echo -e "\e[33mInstall sudo - OK\e[0m"
 usermod -aG sudo $dev_user
-touch /etc/sudoers.d/the.conf
 mkdir -p /var/log/sudo
-echo "Defaults requiretty" | tee /etc/sudoers.d/the.conf > /dev/null
-echo "Defaults passwd_tries=3" | tee -a /etc/sudoers.d/the.conf > /dev/null
-echo 'Defaults badpass_message="Wrong password. Access denied."' | tee -a /etc/sudoers.d/the.conf > /dev/null
-echo 'Defaults logfile="/var/log/sudo/su.log"' | tee -a /etc/sudoers.d/the.conf > /dev/null
-echo "Defaults log_input,log_output" | tee -a /etc/sudoers.d/the.conf > /dev/null
-echo 'Defaults iolog_dir="/var/log/sudo"' | tee -a /etc/sudoers.d/the.conf > /dev/null
+echo "Defaults requiretty" | tee -a /etc/sudoers > /dev/null
+echo "Defaults passwd_tries=3" | tee -a /etc/sudoers > /dev/null
+echo 'Defaults badpass_message="Wrong password. Access denied."' | tee -a /etc/sudoers > /dev/null
+echo 'Defaults logfile="/var/log/sudo/su.log"' | tee -a /etc/sudoers > /dev/null
+echo "Defaults log_input,log_output" | tee -a /etc/sudoers > /dev/null
+echo 'Defaults iolog_dir="/var/log/sudo"' | tee -a /etc/sudoers > /dev/null
 echo -e "\e[33mConfig sudo - OK\e[0m"
 
 echo -e "\e[35mDeployment is finished successfully\e[0m"
